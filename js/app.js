@@ -59,7 +59,7 @@
             if (!item || item.className === 'collapser') {
                 return;
             }
-            togglePortalList();
+            (window.innerWidth <= 568) && togglePortalList();
             loadArticles(item.id, _currentFilter);
         });
 

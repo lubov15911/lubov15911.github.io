@@ -82,7 +82,7 @@ aside .collapser {
   position: absolute;
   background: #fefefe;
   opacity: 0.7;
-  left: 270px;
+  left: 260px;
   height: 30px;
   width: 30px;
   border: 1px solid #757171;
@@ -169,4 +169,44 @@ body > footer {
   width: 100%;
   bottom: 0;
   z-index: -1;
+}
+
+@media (min-width: 568px) {
+  body > main {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  aside {
+    width: 255px;
+    position: static;
+    flex-shrink: 0;
+  }
+
+  aside.collapsed {
+    width: 140px;
+  }
+
+  aside.collapsed > .collapser {
+    left: 140px;
+  }
+
+  section {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1024px) {
+  body > main {
+    max-width: 1024px;
+    margin: auto;
+  }
+
+  aside.collapsed {
+    width: 255px;
+  }
+
+  .collapser {
+    display: none;
+  }
 }
