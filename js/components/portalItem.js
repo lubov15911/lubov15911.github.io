@@ -13,7 +13,7 @@ class PortalItem {
         image.src = this.logoUrl;
         image.alt = this.title;
 
-        let title = document.createElement('h4');
+        let title = document.createElement('h3');
         title.innerText = this.title;
 
         item.appendChild(image);

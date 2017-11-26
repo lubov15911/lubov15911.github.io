@@ -4,7 +4,7 @@ body {
 }
 
 /* Header */
-header {
+body > header {
   background: #252525;
   display: flex;
   align-items: center;
@@ -55,8 +55,11 @@ aside {
   justify-content: space-between;
   background: #fefefe;
   padding: 10px;
-
+  border: 1px solid #75717187;
+  border-radius: 10px;
   position: fixed;
+  top: 130px;
+  z-index: 10;
 }
 
 aside.collapsed {
@@ -99,8 +102,56 @@ aside div:not(:first-child) img {
   margin: 0 auto 10px;
 }
 
-aside div:not(:first-child) h4 {
+aside div:not(:first-child) h3 {
   text-align: center;
 }
 
 /* Articles */
+#articleList {
+  padding: 0 20px;
+}
+
+article {
+  background: #fefefe;
+  border: 1px solid #75717187;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+article header {
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-size: 1.5em;
+}
+
+article img {
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+article a {
+  color: #4aaaa5;
+  font-size: 0.8em;
+  display: block;
+  margin: 5px 0 10px;
+}
+
+article a:hover,
+article a:visited {
+  color: #2f7571;
+}
+
+article footer {
+  font-size: 0.6em;
+  color: #757171;
+}
+
+/* Footer */
+body > footer {
+  font-size: 0.8em;
+  text-align: center;
+  margin: 20px;
+}

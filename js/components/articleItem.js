@@ -11,7 +11,7 @@ class Article {
     get htmlElement() {
         // Header of an article
         let header = document.createElement('header');
-        let title = document.createElement('h3');
+        let title = document.createElement('h2');
         title.innerText = this.title;
         header.appendChild(title);
 
@@ -26,13 +26,15 @@ class Article {
         body.appendChild(description);
         let linkToSource = document.createElement('a');
         linkToSource.href = this.url;
+        linkToSource.target = '_blank';
         linkToSource.innerText = 'Read more...';
         body.appendChild(linkToSource);
 
         // Footer of the article
         let footer = document.createElement('footer');
         let date = document.createElement('p');
-        date.innerText = this.publishedAt;
+        let time = new Date(Date.parse(this.publishedAt));
+        date.innerText = `${time.toLocaleDateString()}, ${time.toLocaleTimeString()}`;
         footer.appendChild(date);
         let author = document.createElement('p');
         author.innerText = `by ${this.author}.`;
