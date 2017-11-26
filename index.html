@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Homework #1</title>
+  <link rel="stylesheet" href="styles/reset.css" />
+  <link rel="stylesheet" href="styles/app.css" />
+</head>
+<body>
+<!-- Header -->
+<header>
+  <img src="images/newsportalLogo.png" alt="NewsPortal">
+  <h1>Here you can find any news you want.</h1>
+</header>
+<main>
+  <!-- Buttons with news portals -->
+  <aside id="aside">
+    <div class="collapser" onclick="togglePortalList()">></div>
+  </aside>
+  <!-- List of articles -->
+  <section>
+    <!-- Hottest or All news -->
+    <nav>
+      <input type="radio" name="articleType" id="all" checked>
+      <label for="all">All</label>
+      <input type="radio" name="articleType" id="headlines">
+      <label for="headlines">Top-headlines</label>
+    </nav>
+    <articles id="articleList"></articles>
+  </section>
+  <!-- Anchor -->
+  <div>Up</div>
+</main>
+<!-- Footer -->
+<footer>
+  All right bla-bla
+</footer>
+
+<!-- Include this scripts here, because imports/exports dont work with Chrome-54 (only from version 61) -->
+
+<!-- "Database" -->
+<script src="js/db/newsPortals.js"></script>
+<!-- Components -->
+<script src="js/components/portalItem.js"></script>
+<script src="js/components/articleItem.js"></script>
+<!-- Managers -->
+<script src="js/requestsManager.js"></script>
+
+<!-- Main script -->
+<script src="js/app.js"></script>
+</body>
+</html>
