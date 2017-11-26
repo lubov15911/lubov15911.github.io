@@ -1,5 +1,8 @@
 (function () {
     document.addEventListener("DOMContentLoaded", () => {
+        let greetingElement = document.querySelector('.greeting');
+        let infoBox = document.querySelector('.loading');
+
         let _currentFilter = 'all';
         let _currentPortal = null;
 
@@ -9,12 +12,8 @@
             return buttons.find(item => item.checked).id;
         }
 
-        function startSpinner() {
-            // Start spinner
-        }
-
-        function stopSpinner() {
-
+        function toggleSpinner() {
+            infoBox.classList.toggle('hide');
         }
 
         function clearArticles() {
@@ -27,16 +26,20 @@
                 // There is nothing to update
                 return;
             }
+            if (greetingElement) {
+                greetingElement.classList.add('hide');
+                greetingElement = null;
+            }
 
             clearArticles();
-            startSpinner();
+            toggleSpinner();
 
             _currentPortal = newsPortalId;
             _currentFilter = filter;
 
             getArticles(newsPortalId, _currentFilter)
                 .then(data => {
-                    stopSpinner();
+                    toggleSpinner();
                     let articlesSection = document.getElementById('articleList');
                     data.map(item => (new Article(item)).htmlElement)
                         .forEach(item => articlesSection.appendChild(item));
@@ -56,6 +59,7 @@
             if (!item || item.className === 'collapser') {
                 return;
             }
+            togglePortalList();
             loadArticles(item.id, _currentFilter);
         });
 

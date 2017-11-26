@@ -43,8 +43,16 @@ nav label:hover {
   cursor: pointer;
 }
 
-main {
-  position: relative;
+.information {
+  margin: 20px;
+  height: calc(100% - 50px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hide {
+  display: none;
 }
 
 /* Aside (block with news portals) */
@@ -108,6 +116,7 @@ aside div:not(:first-child) h3 {
 
 /* Articles */
 #articleList {
+  background: #ececec;
   padding: 0 20px;
 }
 
@@ -153,5 +162,11 @@ article footer {
 body > footer {
   font-size: 0.8em;
   text-align: center;
-  margin: 20px;
+  margin: 20px 0;
+
+  box-sizing: border-box;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  z-index: -1;
 }

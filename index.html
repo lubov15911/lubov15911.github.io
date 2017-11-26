@@ -14,7 +14,7 @@
 </header>
 <main>
   <!-- Buttons with news portals -->
-  <aside id="aside">
+  <aside id="aside" class="collapsed">
     <div class="collapser" onclick="togglePortalList()">></div>
   </aside>
   <!-- List of articles -->
@@ -27,6 +27,10 @@
       <label for="headlines">Top-headlines</label>
     </nav>
     <div id="articleList"></div>
+    <div class="information">
+      <h2 class="greeting">Welcome to News Portal</h2>
+      <h4 class="loading hide">Loading ...</h4>
+    </div>
   </section>
   <!-- Anchor -->
   <!--<div>Up</div>-->
@@ -36,7 +40,7 @@
   <p>&#9400; <a href="https://newsapi.org/">https://newsapi.or</a></p>
 </footer>
 
-<!-- Include this scripts here, because imports/exports dont work with Chrome-54 (only from version 61) -->
+<!-- Include this scripts here, because imports/exports dont work with Chrome-54 (only with 61+) -->
 
 <!-- "Database" -->
 <script src="js/db/newsPortals.js"></script>
