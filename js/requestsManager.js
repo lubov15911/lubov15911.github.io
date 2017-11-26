@@ -15,6 +15,7 @@ function getUrl(newsPortalId, filter) {
 
 function getArticles(newsPortalId, filter) {
     return new Promise((resolve, reject) => {
+        console.warn(getUrl(newsPortalId, filter));
         fetch(getUrl(newsPortalId, filter))
             .then(response => response.json())
             .then(data => data.status !== RESPONSE_STATUS.ERROR ? resolve(data.articles) : reject(error))

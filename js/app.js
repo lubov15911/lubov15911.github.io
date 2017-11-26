@@ -1,12 +1,12 @@
 (function () {
     document.addEventListener("DOMContentLoaded", () => {
-        let _currentFilter = null;
+        let _currentFilter = 'all';
         let _currentPortal = null;
 
         function getCurrentFilter() {
             let buttons = document.getElementsByName('articleType');
             buttons.find = [].find;
-            return buttons.find(item => item.checked);
+            return buttons.find(item => item.checked).id;
         }
 
         function startSpinner() {
@@ -22,18 +22,19 @@
             articlesSection.innerText = '';
         }
 
-        function loadArticles(newsPortalId) {
-            if (_currentPortal === newsPortalId && _currentFilter === getCurrentFilter()) {
+        function loadArticles(newsPortalId, filter) {
+            if (_currentPortal === newsPortalId && (filter && filter === getCurrentFilter())) {
                 // There is nothing to update
                 return;
             }
 
+            clearArticles();
             startSpinner();
 
             _currentPortal = newsPortalId;
-            _currentFilter = getCurrentFilter();
+            _currentFilter = filter;
 
-            getArticles(newsPortalId, _currentFilter.id)
+            getArticles(newsPortalId, _currentFilter)
                 .then(data => {
                     stopSpinner();
                     let articlesSection = document.getElementById('articleList');
@@ -55,9 +56,16 @@
             if (!item || item.className === 'collapser') {
                 return;
             }
-            clearArticles();
-            loadArticles(item.id);
-        })
+            loadArticles(item.id, _currentFilter);
+        });
+
+        document.getElementsByTagName('nav')[0].addEventListener('click', event => {
+            let item = event.target.closest('label');
+            if (!item) {
+                return;
+            }
+            loadArticles(_currentPortal, item.getAttribute('for'));
+        });
 
     });
 })();
