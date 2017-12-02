@@ -38,3 +38,5 @@ class PortalItem {
         return title;
     }
 }
+
+export default PortalItem;

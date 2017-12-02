@@ -1,3 +1,7 @@
+import portals from './db/newsPortals';
+import PortalItem from './components/portalItem';
+import ArticlesManager from './managers/articlesManager';
+
 (function () {
     document.addEventListener("DOMContentLoaded", () => {
         // Local variables
