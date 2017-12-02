@@ -8,6 +8,10 @@ body > header {
   background: #252525;
   display: flex;
   align-items: center;
+  /* Start IE10 */
+  display: -ms-flexbox;
+  -ms-flex-align: center;
+  /* End IE10 */
   box-shadow: 0 0 1px 2px #252525;
 }
 
@@ -24,6 +28,10 @@ header h1 {
 nav {
   display: flex;
   justify-content: center;
+  /* Start IE10 */
+  display: -ms-flexbox;
+  -ms-flex-pack: center;
+  /* End IE10 */
   color: #4aaaa5;
 }
 
@@ -49,6 +57,11 @@ nav label:hover {
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Start IE10 */
+  display: -ms-flexbox;
+  -ms-flex-align: center;
+  -ms-flex-pack: center;
+  /* End IE10 */
 }
 
 .hide {
@@ -61,6 +74,11 @@ aside {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  /* Start IE10 */
+  display: -ms-flexbox;
+  -ms-flex-wrap: wrap;
+  -ms-flex-pack: justify;
+  /* End IE10 */
   background: #fefefe;
   padding: 10px;
   border: 1px solid #75717187;
@@ -175,6 +193,10 @@ body > footer {
   body > main {
     display: flex;
     align-items: flex-start;
+    /* Start IE10 */
+    display: -ms-flexbox;
+    -ms-flex-align: start;
+    /* End IE10 */
   }
 
   aside {
