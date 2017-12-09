@@ -1,4 +1,4 @@
-class Article {
+export default class Article {
     constructor(data) {
         this.title = data.title;
         this.description = data.description;

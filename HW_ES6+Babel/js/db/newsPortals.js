@@ -1,4 +1,4 @@
-let portals = [{
+export default [{
     title: 'Business Insider',
     newsId: 'business-insider',
     logoUrl: 'http://uk.businessinsider.com/apple-touch-icon-precomposed.png?r=US&IR=T'
