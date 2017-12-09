@@ -1,4 +1,4 @@
-## Homework 'ES6 + Babel'
+## 'News Portal' project: all news in one place :smirk:
 
 ### How to set up:
 * Install node modules: `npm install`;
