@@ -12,8 +12,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "node_modules/.bin/webpack",
-    "start": "index.html"
+    "build": "node_modules/.bin/webpack",
+    "build:prod": "node_modules/.bin/webpack --config=webpack.production.config.js",
+    "start": "node_modules/.bin/webpack-dev-server --open"
   },
   "author": "Lubov",
   "license": "ISC",
@@ -26,7 +27,8 @@
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
     "style-loader": "^0.19.0",
-    "webpack": "^3.9.1"
+    "webpack": "^3.9.1",
+    "webpack-dev-server": "^2.9.7"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
