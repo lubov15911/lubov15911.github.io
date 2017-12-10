@@ -48,12 +48,27 @@ export default class ArticlesManager {
         }
     }
 
+    loadStyles() {
+        let links = document.querySelectorAll('head link');
+        links.find = [].find;
+        let articleStyles = links.find(element => element.getAttribute('href').includes('articles'));
+        if (articleStyles) {
+            // Styles are loaded
+            return;
+        }
+
+        articleStyles = links[0].cloneNode();
+        articleStyles.setAttribute('href', 'public/articles.css');
+        document.getElementsByTagName('head')[0].appendChild(articleStyles);
+    }
+
     loadArticles(currentPortal, currentFilter, newsPortalId, filter) {
         if (currentPortal === newsPortalId && (filter && filter === this.getCurrentFilter())) {
             // There is nothing to update
             return;
         }
 
+        this.loadStyles();
         this.hideGreetingElement();
         this.clearArticles();
         this.toggleSpinner();

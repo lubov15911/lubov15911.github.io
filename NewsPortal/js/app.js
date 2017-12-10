@@ -1,11 +1,10 @@
 import portals from './db/newsPortals.json';
 import PortalItem from './components/portalItem';
-import ArticlesManager from './managers/articlesManager';
 
 (function () {
     document.addEventListener("DOMContentLoaded", () => {
         // Local variables
-        let articleManager = new ArticlesManager(document.querySelector('.greeting'), document.querySelector('.loading'));
+        let articleManager;
         let aside = document.getElementById('aside');
         let currentFilter = 'all';
         let currentPortal = null;
@@ -19,8 +18,20 @@ import ArticlesManager from './managers/articlesManager';
                 return;
             }
             (window.innerWidth <= 568) && togglePortalList();
-            [currentPortal, currentFilter] =
-                articleManager.loadArticles(currentPortal, currentFilter, item.id, currentFilter);
+
+            if (!articleManager) {
+                import('./managers/articlesManager').then(module => {
+                    // lazy.
+                    const ArticlesManager = module.default;
+                    articleManager = new ArticlesManager(document.querySelector('.greeting'), document.querySelector('.loading'));
+
+                    [currentPortal, currentFilter] =
+                        articleManager.loadArticles(currentPortal, currentFilter, item.id, currentFilter);
+                });
+            } else {
+                [currentPortal, currentFilter] =
+                    articleManager.loadArticles(currentPortal, currentFilter, item.id, currentFilter);
+            }
         });
 
         document.getElementsByTagName('nav')[0].addEventListener('click', event => {
@@ -28,8 +39,19 @@ import ArticlesManager from './managers/articlesManager';
             if (!item || !currentPortal) {
                 return;
             }
-            [currentPortal, currentFilter] =
-                articleManager.loadArticles(currentPortal, currentFilter, currentPortal, item.getAttribute('for'));
+
+            if (!articleManager) {
+                import('./managers/articlesManager').then(module => {
+                    const ArticlesManager = module.default;
+                    articleManager = new ArticlesManager(document.querySelector('.greeting'), document.querySelector('.loading'));
+
+                    [currentPortal, currentFilter] =
+                        articleManager.loadArticles(currentPortal, currentFilter, currentPortal, item.getAttribute('for'));
+                });
+            } else {
+                [currentPortal, currentFilter] =
+                    articleManager.loadArticles(currentPortal, currentFilter, currentPortal, item.getAttribute('for'));
+            }
         });
     });
 })();
