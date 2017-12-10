@@ -10,7 +10,7 @@
     `npm run build` - development mode;
     `npm run build:prod` - production mode;<br/>
     
-  You should chose one of them. Skipping this step is unable.
+  You should chose one of them. Skipping this step is not possible.
   
 :exclamation: And finally, to start the application, you need to execute the following command:
     

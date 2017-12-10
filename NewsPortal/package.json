@@ -2,14 +2,6 @@
   "name": "hw_2_es6_babel",
   "version": "1.0.0",
   "description": "Homework #2 for FrontCamp",
-  "babel": {
-    "presets": [
-      "env"
-    ],
-    "plugins": [
-      "./plugins/consoleCleaner"
-    ]
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node_modules/.bin/webpack",

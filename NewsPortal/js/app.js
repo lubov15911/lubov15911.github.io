@@ -25,7 +25,7 @@ import ArticlesManager from './managers/articlesManager';
 
         document.getElementsByTagName('nav')[0].addEventListener('click', event => {
             let item = event.target.closest('label');
-            if (!item) {
+            if (!item || !currentPortal) {
                 return;
             }
             [currentPortal, currentFilter] =

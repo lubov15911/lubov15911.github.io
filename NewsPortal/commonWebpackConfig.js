@@ -5,7 +5,7 @@ const CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 module.exports = {
     entry: {
         vendor: ["element-closest", "babel-polyfill", "whatwg-fetch"],
-        app: ["./styles/main.less", "./js/app"]
+        app: ["./styles/less/main.less", "./js/app"]
     },
     output: {
         path: __dirname + "/public",
@@ -19,7 +19,10 @@ module.exports = {
         rules: [{
             test: /js/,
             exclude: /node_modules/,
-            loader: "babel-loader"
+            loader: "babel-loader",
+            options: {
+                presets: ["env"]
+            }
         }, {
             test: /\.less$/,
             use: ExtractTextPlugin.extract({
