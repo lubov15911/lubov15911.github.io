@@ -29,6 +29,9 @@ module.exports = {
                 fallback: "style-loader",
                 use: ["css-loader", "less-loader"]
             })
+        }, {
+            test: /\.json$/,
+            loader: './plugins/json-loader'
         }]
     },
     plugins: [

@@ -1,4 +1,4 @@
-import portals from './db/newsPortals';
+import portals from './db/newsPortals.json';
 import PortalItem from './components/portalItem';
 import ArticlesManager from './managers/articlesManager';
 
