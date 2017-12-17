@@ -1,0 +1,74 @@
+@import "utils";
+@import "navigation";
+@import "portals";
+
+// TODO: add file with width/height variables
+// TODO: mixins for backgrounds
+
+body {
+  background: @dirtyWhiteBackground;
+  font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+
+  & > header {
+    background: @black;
+    box-shadow: 0 0 1px 2px @black;
+    .flexbox;
+    .align-items(center);
+
+    img {
+      max-height: 80px;
+    }
+
+    h1 {
+      color: @snowy;
+      text-shadow: 1px 0 1px;
+    }
+  }
+
+  & > main {
+    @media (min-width: 568px) {
+      .flexbox;
+      .align-items-start;
+    }
+
+    @media (min-width: 1024px) {
+      max-width: 1024px;
+      margin: auto;
+    }
+  }
+
+  & > footer {
+    position: fixed;
+    box-sizing: border-box;
+    width: 100%;
+    bottom: 0;
+    z-index: -1;
+    margin: 20px 0;
+    font-size: 0.8em;
+    text-align: center;
+  }
+}
+
+.hide {
+  display: none;
+}
+
+.information {
+  .flexbox;
+  .align-items(center);
+  .justify-content(center);
+  margin: 20px;
+  height: calc(100% - 50px);
+
+}
+
+#articleList {
+  background: @dirtyWhiteBackground;
+  padding: 0 20px;
+}
+
+@media (min-width: 568px) {
+  section {
+    width: 100%;
+  }
+}

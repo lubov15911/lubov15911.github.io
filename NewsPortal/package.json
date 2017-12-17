@@ -2,22 +2,26 @@
   "name": "hw_2_es6_babel",
   "version": "1.0.0",
   "description": "Homework #2 for FrontCamp",
-  "babel": {
-    "presets": ["env"],
-    "plugins": ["./plugins/consoleCleaner"]
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "node_modules/.bin/webpack",
-    "start": "index.html"
+    "build": "node_modules/.bin/webpack",
+    "build:prod": "node_modules/.bin/webpack --config=webpack.production.config.js",
+    "start": "node_modules/.bin/webpack-dev-server --open"
   },
   "author": "Lubov",
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-loader": "^7.1.2",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-preset-env": "^1.6.1",
-    "webpack": "^3.9.1"
+    "css-loader": "^0.28.7",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
+    "style-loader": "^0.19.0",
+    "webpack": "^3.9.1",
+    "webpack-dev-server": "^2.9.7"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",

@@ -1,0 +1,21 @@
+nav {
+  .flexbox;
+  .justify-content(center);
+  color: @turquoise;
+
+  input {
+    display: none;
+  }
+
+  label {
+    margin: 15px 20px;
+    font-weight: bold;
+    text-shadow: 0 0 0.5px;
+  }
+
+  input:checked + label,
+  label:hover {
+    color: @darkTurquoise;
+    cursor: pointer;
+  }
+}
