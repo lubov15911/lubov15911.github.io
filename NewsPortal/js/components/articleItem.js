@@ -1,3 +1,12 @@
+import Image from './imageItem';
+import DecoratorSingleton from './decorator';
+
+let Decorator = DecoratorSingleton.getInstance();
+
+/**
+ * This is also an example of a Factory pattern
+ * [creational]
+ */
 export default class Article {
     constructor(data) {
         this.title = data.title;
@@ -28,21 +37,9 @@ export default class Article {
     createHeader() {
         let header = document.createElement('header');
         let title = document.createElement('h2');
-        title.innerText = this.title;
+        Decorator.for(title).applyText(this.title);
         header.appendChild(title);
         return header;
-    }
-
-    /**
-     * Create image element for article
-     *
-     * @returns {HTMLImageElement}
-     */
-    createImage() {
-        let image = document.createElement('img');
-        image.src = this.urlToImage;
-        image.alt = this.title;
-        return image;
     }
 
     /**
@@ -53,7 +50,7 @@ export default class Article {
      */
     createParagraph(text) {
         let paragraph = document.createElement('p');
-        paragraph.innerText = text;
+        Decorator.for(paragraph).applyText(text);
         return paragraph;
     }
 
@@ -64,9 +61,10 @@ export default class Article {
      */
     createLinkToSource() {
         let linkToSource = document.createElement('a');
-        linkToSource.href = this.url;
-        linkToSource.target = '_blank';
-        linkToSource.innerText = 'Read more...';
+        Decorator.for(linkToSource)
+            .applyLink(this.url)
+            .applyTarget('_blank')
+            .applyText('Read more...');
         return linkToSource;
     }
 
@@ -77,7 +75,7 @@ export default class Article {
      */
     createBody() {
         let body = document.createElement('main');
-        body.appendChild(this.createImage());
+        body.appendChild(Image(this.urlToImage, this.title).getHTMLElement());
         body.appendChild(this.createParagraph(this.description));
         body.appendChild(this.createLinkToSource());
         return body;

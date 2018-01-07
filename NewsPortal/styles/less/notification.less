@@ -1,0 +1,29 @@
+@import "utils";
+
+// TODO: add animation
+.notification {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  width: 400px;
+  border-radius: 15px;
+  padding: 20px;
+}
+
+.notification-error {
+  background: @errorBackground;
+  border: 2px solid @errorBorder;
+  color: @errorText;
+}
+
+.notification-warning {
+  background: @warningBackground;
+  border: 2px solid @warningBorder;
+  color: @warningText;
+}
+
+.notification-info {
+  background: @infoBackground;
+  border: 2px solid @infoBorder;
+  color: @infoText;
+}

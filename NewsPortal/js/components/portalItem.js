@@ -1,5 +1,15 @@
+import Image from './imageItem';
+import DecoratorSingleton from './decorator';
+
+let Decorator = DecoratorSingleton.getInstance();
+
+/**
+ * This is also an example of a Factory pattern
+ * [creational]
+ */
 class PortalItem {
     constructor(title, newsId, logoUrl) {
+        this.element = document.createElement('div');
         this.title = title;
         this.id = newsId;
         this.logoUrl = logoUrl;
@@ -7,26 +17,13 @@ class PortalItem {
 
     // Getters
     get getHTMLElement() {
-        let item = document.createElement('div');
-        item.id = this.id;
-        item.appendChild(this.createImage());
-        item.appendChild(this.createTitleElement());
-        return item;
+        this.element.id = this.id;
+        this.element.appendChild(Image(this.logoUrl, this.title).getHTMLElement());
+        this.element.appendChild(this.createTitleElement());
+        return this.element;
     }
 
     // Methods
-    /**
-     * Create image element for Portal Item
-     *
-     * @returns {HTMLImageElement}
-     */
-    createImage() {
-        let image = document.createElement('img');
-        image.src = this.logoUrl;
-        image.alt = this.title;
-        return image;
-    }
-
     /**
      * Create title element for the portal item
      *
@@ -34,8 +31,24 @@ class PortalItem {
      */
     createTitleElement() {
         let title = document.createElement('h3');
-        title.innerText = this.title;
+        Decorator.for(title).applyText(this.title);
         return title;
+    }
+
+    toggleSuspendedState() {
+        document.getElementById(this.id).classList.toggle('deactivated');
+    }
+
+    remove() {
+        this.element.remove();
+    }
+
+    /**
+     * Command pattern
+     * [behavioral]
+     */
+    execute(command) {
+        this[command]();
     }
 }
 

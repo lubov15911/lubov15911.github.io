@@ -1,7 +1,7 @@
 import RequestManager from './requestManager';
 import Article from '../components/articleItem';
 
-export default class ArticlesManager {
+class ArticlesManager {
     constructor(greetingElement, infoBox) {
         this.greetingElement = greetingElement;
         this.infoBox = infoBox;
@@ -62,6 +62,10 @@ export default class ArticlesManager {
         document.getElementsByTagName('head')[0].appendChild(articleStyles);
     }
 
+    /**
+     * Facade pattern
+     * [structural]
+     */
     loadArticles(currentPortal, currentFilter, newsPortalId, filter) {
         if (currentPortal === newsPortalId && (filter && filter === this.getCurrentFilter())) {
             // There is nothing to update
@@ -86,3 +90,19 @@ export default class ArticlesManager {
         return [ currentPortal, currentFilter ];
     }
 }
+
+/**
+ * Singleton pattern
+ * [creational]
+ */
+let ArticleManagerSingleton = (() => {
+    let singleton;
+    return {
+        getInstance(greetingElement, infoBox) {
+            !singleton && (singleton = new ArticlesManager(greetingElement, infoBox));
+            return singleton;
+        }
+    }
+})();
+
+export default ArticleManagerSingleton;
