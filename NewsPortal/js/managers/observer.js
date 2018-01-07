@@ -1,7 +1,3 @@
-/**
- * Observer pattern
- * [behavioral]
- */
 class ObserverList {
     constructor() {
         this.observerList = [];

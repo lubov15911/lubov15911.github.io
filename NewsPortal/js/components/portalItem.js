@@ -51,6 +51,10 @@ class PortalItem {
         this.notify(NOTIFICATION_TYPE.warning, true)
     }
 
+    /**
+     * Example of Observer pattern
+     * [behavioral]
+     */
     addObservers(observers) {
         observers.forEach(observer => {
             this.observers.add(observer);
