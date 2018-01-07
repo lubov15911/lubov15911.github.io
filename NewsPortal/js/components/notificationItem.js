@@ -7,11 +7,13 @@ const NOTIFICATION_TYPE = {
     warning: 'warning',
     info: 'info'
 };
+const NOTIFICATION_TIMEOUT = 5000;  // 5 sec
 
 class Notification {
-    constructor(type, message) {
+    constructor(type, message, timer) {
         this.type = type ? type : NOTIFICATION_TYPE.info;
         this.message = this.type.toUpperCase() + (message ? `: ${message}.` : '');
+        timer && (this.timer = timer);
     }
 
     // Setters
@@ -49,14 +51,30 @@ class Notification {
         }, this.timer);
     }
 
+    update(status) {
+        status ? this.showNotification() : this.hideNotification();
+    }
+
     showNotification() {
         !this.element && this.createElement();
         document.body.appendChild(this.element);
         this.startTimer()
     }
+
+    hideNotification() {
+        if (!this.element) { return; }
+
+        this.element.remove();
+    }
 }
+
+const NotificationsArray = [
+    new Notification(NOTIFICATION_TYPE.error, 'Portal is temporarily unavailable', NOTIFICATION_TIMEOUT),
+    new Notification(NOTIFICATION_TYPE.warning, 'Some portals were removed from your list', NOTIFICATION_TIMEOUT),
+    new Notification(NOTIFICATION_TYPE.info, 'Some portals were suspended', NOTIFICATION_TIMEOUT)
+];
 
 export {
     NOTIFICATION_TYPE,
-    Notification
+    NotificationsArray
 }

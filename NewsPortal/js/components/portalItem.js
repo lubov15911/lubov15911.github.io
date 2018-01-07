@@ -1,5 +1,7 @@
 import Image from './imageItem';
 import DecoratorSingleton from './decorator';
+import ObserverList from './../managers/observer';
+import { NOTIFICATION_TYPE } from './notificationItem';
 
 let Decorator = DecoratorSingleton.getInstance();
 
@@ -13,6 +15,8 @@ class PortalItem {
         this.title = title;
         this.id = newsId;
         this.logoUrl = logoUrl;
+
+        this.observers = new ObserverList();
     }
 
     // Getters
@@ -36,11 +40,33 @@ class PortalItem {
     }
 
     toggleSuspendedState() {
-        document.getElementById(this.id).classList.toggle('deactivated');
+        let elementClasses = document.getElementById(this.id).classList;
+        elementClasses.toggle('deactivated');
+        this.notify(NOTIFICATION_TYPE.info, elementClasses.contains('deactivated'));
+        this.notify(NOTIFICATION_TYPE.error, false);
     }
 
     remove() {
         this.element.remove();
+        this.notify(NOTIFICATION_TYPE.warning, true)
+    }
+
+    addObservers(observers) {
+        observers.forEach(observer => {
+            this.observers.add(observer);
+        });
+    }
+
+    removeObserver(observer) {
+        this.observers.removeAt(this.observers.indexOf(observer, 0))
+    }
+
+    notify(type, context) {
+        let observerLength = this.observers.getLength;
+        for (let i = 0; i < observerLength; i++) {
+            let notification = this.observers.get(i);
+            notification.type === type && notification.update(context);
+        }
     }
 
     /**

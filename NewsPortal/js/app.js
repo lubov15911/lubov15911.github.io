@@ -1,15 +1,12 @@
 import portals from './db/newsPortals.json';
 import PortalItem from './components/portalItem';
-import {
-    NOTIFICATION_TYPE,
-    Notification as NotificationItem
-} from './components/notificationItem';
+import { NOTIFICATION_TYPE, NotificationsArray } from './components/notificationItem';
 
 (function () {
     const DEACTIVATE_TIMEOUT = 30000;   // 30 sec
     const REINSTATE_TIMEOUT = 30000;    // 30 sec
     const REMOVE_TIMEOUT = 20000;       // 20 sec
-    const NOTIFICATION_TIMEOUT = 5000;  // 10 sec
+
 
     document.addEventListener("DOMContentLoaded", () => {
         // Local variables
@@ -27,14 +24,9 @@ import {
             });
         }
 
-        function displayNotification(type, text) {
-            let error = new NotificationItem(type, text);
-            error.setTimer = NOTIFICATION_TIMEOUT;
-            error.showNotification();
-        }
-
         portals.map(item => {
             let portal = new PortalItem(item.title, item.newsId, item.logoUrl);
+            portal.addObservers(NotificationsArray);
             portalsArray.push(portal);
             return portal.getHTMLElement;
         }).forEach(item => aside.appendChild(item));
@@ -48,7 +40,7 @@ import {
 
             if (item.classList.contains('deactivated')) {
                 // We can't load articles from deactivated portal
-                displayNotification(NOTIFICATION_TYPE.error, 'Portal is temporarily unavailable');
+                portalsArray.find(portal => portal.id === item.id).notify(NOTIFICATION_TYPE.error, true);
                 return;
             }
 
@@ -100,7 +92,6 @@ import {
         setTimeout(() => {
             // TODO: In future we should use portal IDs (E.g. IDs can be gotten in request)
             executeCommand('toggleSuspendedState', [2, 5, 6]);
-            displayNotification(NOTIFICATION_TYPE.info, 'Some portals were suspended');
 
             // Similar situation: we can receive a request that some portals are reinstated
             setTimeout(() => {
@@ -118,7 +109,6 @@ import {
                 portalsArray.splice(item, 1);
             });
             executeCommand('remove', [0, 1]);
-            displayNotification(NOTIFICATION_TYPE.warning, 'Some portals were removed from your list');
         }, REMOVE_TIMEOUT);
     });
 })();
