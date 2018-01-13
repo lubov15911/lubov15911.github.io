@@ -8,7 +8,7 @@
 :exclamation: The next step is preparation of necessary sources. Here we have two options:
 
     `npm run build` - development mode;
-    `npm run build:prod` - production mode;<br/>
+    `npm run build:prod` - production mode;
     
   You should chose one of them. Skipping this step is not possible.
   
