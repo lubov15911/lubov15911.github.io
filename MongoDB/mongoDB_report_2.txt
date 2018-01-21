@@ -1,0 +1,204 @@
+2.1:
+	> db.airlines.aggregate([
+	 	{
+	 		$group: {
+	 			_id: "$class",
+	 			total: { $sum: 1 }
+ 			}
+		},
+		{
+			$project: {
+				_id: 0,
+				class: "$_id",
+				total: "$total"
+			}
+		}
+ 	])
+
+ 	Output:
+ 	{ "class" : "F", "total" : 140343 }
+	{ "class" : "L", "total" : 23123 }
+	{ "class" : "P", "total" : 5683 }
+	{ "class" : "G", "total" : 17499 }
+
+2.2:
+	>  db.airlines.aggregate([
+		{
+			$match: {
+				destCountry: { $ne: "United States"} }
+		}, {
+			$group: {
+				_id: "$destCity",
+				avgPassengers: { $avg: "$passengers" }
+			}
+		}, {
+			$sort: { avgPassengers: -1 }
+		}, {
+			$limit: 3
+		}, {
+			$project: {
+				avgPassengers: 1,
+				city: "$_id",
+				_id: 0
+			}
+		}
+	])
+
+	Output:
+	{ "avgPassengers" : 8052.380952380952, "city" : "Abu Dhabi, United Arab Emirates" }
+	{ "avgPassengers" : 7176.596638655462, "city" : "Dubai, United Arab Emirates" }
+	{ "avgPassengers" : 7103.333333333333, "city" : "Guangzhou, China" }
+
+2.3:
+	> db.airlines.aggregate([
+		{
+			$match: {
+				destCountry: "Latvia"
+			}
+		}, {
+			$group: {
+				_id: "$destCountry",
+				carriers: { $addToSet: "$carrier" }
+			}
+		}
+	])
+
+	Output:
+	{ "_id" : "Latvia", "carriers" : [ "Uzbekistan Airways", "Blue Jet SP Z o o", "JetClub AG" ] }
+
+2.4:
+	db.airlines.aggregate([
+		{
+			$match: {
+				$and: [
+					{ originCountry: "United States" },
+					{ destCountry: { $in: ["Greece", "Italy", "Spain"] } }
+				]
+			}
+		}, {
+			$group: {
+				_id: "$carrier",
+				total: { $sum: "$passengers" }
+			}
+		}, {
+			$sort: { total: -1 }
+		}, {
+			$limit: 10
+		}, {
+			$skip: 3
+		}
+	])
+
+	Output:
+	{ "_id" : "Compagnia Aerea Italiana", "total" : 280256 }
+	{ "_id" : "United Air Lines Inc.", "total" : 229936 }
+	{ "_id" : "Emirates", "total" : 100903 }
+	{ "_id" : "Air Europa", "total" : 94968 }
+	{ "_id" : "Meridiana S.p.A", "total" : 20308 }
+	{ "_id" : "Norwegian Air Shuttle ASA", "total" : 13344 }
+	{ "_id" : "VistaJet Limited", "total" : 183 }
+
+2.5:
+	> db.airlines.aggregate([
+		{
+			$match: { originCountry: "United States" }
+		}, {
+			$group: {
+				_id: {
+					state: "$originState",
+					city: "$originCity"
+				},
+				passengers: { $sum: "$passengers" }
+			}
+		}, {
+			$sort: { passengers: -1 }
+		}, {
+			$group: {
+				_id: "$_id.state",
+				city: { $first: "$_id.city" },
+				passengers: { $first: "$passengers" }
+			}
+		}, {
+			$sort: { _id: 1 }
+		}, {
+			$limit: 5
+		}, {
+			$project: {
+				_id: 0,
+				totalPassengers: "$passengers",
+				location: {
+					state: "$_id",
+					city: "$city"
+				}
+			}
+		}, {
+			$sort: { totalPassengers: -1 }
+		}
+	])
+
+	Output:
+	{ "totalPassengers" : 23701556, "location" : { "state" : "California", "city" : "Los Angeles, CA" } }
+	{ "totalPassengers" : 13152753, "location" : { "state" : "Arizona", "city" : "Phoenix, AZ" } }
+	{ "totalPassengers" : 1472404, "location" : { "state" : "Alaska", "city" : "Anchorage, AK" } }
+	{ "totalPassengers" : 760120, "location" : { "state" : "Alabama", "city" : "Birmingham, AL" } }
+	{ "totalPassengers" : 571452, "location" : { "state" : "Arkansas", "city" : "Little Rock, AR" } }
+
+3:
+	> db.enron.aggregate([{$unwind: "$headers.To"}, {$group: {_id: {id: "$_id", from: "$headers.From"}, To: {$addToSet: "$headers.To"}}}]) // remove duplicates
+
+	> db.enron.aggregate([
+		// This part fixes the issue with recipient duplication
+		{
+			$unwind: "$headers.To"
+		}, {
+			$group: {
+				_id: {
+					id: "$_id",
+					from: "$headers.From"
+				},
+				To: { $addToSet: "$headers.To" }
+			}
+		},
+		// The main task
+		{
+			$unwind: "$To"
+		}, {
+			$group: {
+				_id: {
+					from: "$_id.from",
+					to: "$To"
+				},
+				numMessages: { $sum: 1 }
+			}
+		}, {
+			$sort: { numMessages: -1 }
+		},
+		// Since the task does not specify how many pairs we need to find out, I set the limit of them to 20
+		{
+			$limit: 20
+		}
+	])
+
+	Output:
+	{ "_id" : { "from" : "susan.mara@enron.com", "to" : "jeff.dasovich@enron.com" }, "numMessages" : 750 }
+	{ "_id" : { "from" : "soblander@carrfut.com", "to" : "soblander@carrfut.com" }, "numMessages" : 679 }
+	{ "_id" : { "from" : "susan.mara@enron.com", "to" : "james.steffes@enron.com" }, "numMessages" : 646 }
+	{ "_id" : { "from" : "susan.mara@enron.com", "to" : "richard.shapiro@enron.com" }, "numMessages" : 616 }
+	{ "_id" : { "from" : "evelyn.metoyer@enron.com", "to" : "kate.symes@enron.com" }, "numMessages" : 567 }
+	{ "_id" : { "from" : "susan.mara@enron.com", "to" : "karen.denne@enron.com" }, "numMessages" : 552 }
+	{ "_id" : { "from" : "susan.mara@enron.com", "to" : "alan.comnes@enron.com" }, "numMessages" : 550 }
+	{ "_id" : { "from" : "susan.mara@enron.com", "to" : "paul.kaufman@enron.com" }, "numMessages" : 506 }
+	{ "_id" : { "from" : "susan.mara@enron.com", "to" : "harry.kingerski@enron.com" }, "numMessages" : 489 }
+	{ "_id" : { "from" : "sgovenar@govadv.com", "to" : "paul.kaufman@enron.com" }, "numMessages" : 488 }
+	{ "_id" : { "from" : "sgovenar@govadv.com", "to" : "jdasovic@enron.com" }, "numMessages" : 485 }
+	{ "_id" : { "from" : "sgovenar@govadv.com", "to" : "harry.kingerski@enron.com" }, "numMessages" : 481 }
+	{ "_id" : { "from" : "sgovenar@govadv.com", "to" : "smara@enron.com" }, "numMessages" : 467 }
+	{ "_id" : { "from" : "sgovenar@govadv.com", "to" : "mday@gmssr.com" }, "numMessages" : 464 }
+	{ "_id" : { "from" : "susan.mara@enron.com", "to" : "sandra.mccubbin@enron.com" }, "numMessages" : 464 }
+	{ "_id" : { "from" : "sgovenar@govadv.com", "to" : "steven.j.kean@enron.com" }, "numMessages" : 460 }
+	{ "_id" : { "from" : "sgovenar@govadv.com", "to" : "bhansen@lhom.com" }, "numMessages" : 457 }
+	{ "_id" : { "from" : "sgovenar@govadv.com", "to" : "rshapiro@enron.com" }, "numMessages" : 457 }
+	{ "_id" : { "from" : "sgovenar@govadv.com", "to" : "james.d.steffes@enron.com" }, "numMessages" : 454 }
+	{ "_id" : { "from" : "sgovenar@govadv.com", "to" : "kdenne@enron.com" }, "numMessages" : 452 }
+
+	The most talkative pair is "susan.mara@enron.com -> jeff.dasovich@enron.com": they have 750 messages
