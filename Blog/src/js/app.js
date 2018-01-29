@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const bodyParser  = require('body-parser');
 
 // Initialize logger
 const logger = require('winston');
@@ -13,6 +14,9 @@ logger.info('[App]: Initialization');
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'pug');
 app.use(express.static(path.join(__dirname, '../')));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 let routes = require('./routes')();
 app.use('/', routes);

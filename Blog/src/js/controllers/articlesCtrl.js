@@ -44,7 +44,29 @@ function removeArticle(req, res, next) {
 }
 
 function createArticle(req, res, next) {
+    logger.debug('[ArticlesCtrl]: Received createArticle request. Article id:', req.params.id);
 
+    if (!req.body._id) {
+        res.statusCode = 400; // Check an appropriate error code
+        res.statusMessage = 'Body is incorrect';
+        logger.error('[ArticleCtrl: Body is incorrect');
+        res.render('articles', { articles: articles });
+        return;
+    }
+    articles.push(req.body);
+
+    fs.writeFile(FILE_PATH + '.json', JSON.stringify(articles), 'utf8', (error) => {
+        if (!error) {
+            res.statusCode = 200;
+            res.statusMessage = 'Article successfully added';
+            logger.info('[ArticleCtrl: Article successfully added');
+        } else {
+            res.statusCode = 500;
+            res.statusMessage = 'Unable to add the article';
+            logger.error('[ArticleCtrl: Unable to add the article');
+        }
+        res.render('articles', { articles: articles });
+    });
 }
 
 module.exports = {
