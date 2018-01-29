@@ -35,6 +35,21 @@ document.addEventListener('click', (event) => {
                 .then((response) => console.log(response))
                 .catch((error) => console.error(error));
             break;
+        case 'saveConfig':
+            // TODO: for test. In future it can be custom view settings of the page/article/etc
+            let config = {
+                background: 'green'
+            };
+            fetch('http://localhost:3000/config', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(config)
+            })
+                .then((response) => console.log(response))
+                .catch((error) => console.error(error));
+            break;
         default:
             return;
     }
