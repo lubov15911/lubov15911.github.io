@@ -1,13 +1,16 @@
 let articles = require('../../content/allArticles');
 const fs = require('fs');
 const path = require('path');
+const logger = require('winston');
 const FILE_PATH = path.join(__dirname, '../../content/allArticles');
 
 function getAll(req, res, next) {
+    logger.debug('[ArticlesCtrl]: Received getAll articles request');
     res.render('articles', { articles: articles });
 }
 
 function getArticle(req, res, next) {
+    logger.debug('[ArticlesCtrl]: Received getArticle request. Article id:', req.params.id);
     let article = articles.find((item) => item._id === req.params.id);
     let articlesFound = article ? [article] : null;
 
@@ -15,7 +18,7 @@ function getArticle(req, res, next) {
 }
 
 function removeArticle(req, res, next) {
-    console.log('removeArticle');
+    logger.debug('[ArticlesCtrl]: Received removeArticle request. Article id:', req.params.id);
     let articleIndex = articles.findIndex((item) => item._id === req.params.id);
     if (articleIndex !== -1) {
         articles.splice(articleIndex, 1);
@@ -24,15 +27,18 @@ function removeArticle(req, res, next) {
             if (!error) {
                 res.statusCode = 200;
                 res.statusMessage = 'Article successfully removed';
+                logger.info('[ArticleCtrl: Article successfully removed');
             } else {
                 res.statusCode = 500;
                 res.statusMessage = 'Unable to delete the article';
+                logger.error('[ArticleCtrl: Unable to delete the article');
             }
             res.render('articles', { articles: articles });
         });
     } else {
         res.statusCode = 404;
         res.statusMessage = 'Article is not found';
+        logger.error('[ArticleCtrl: Article is not found');
         res.render('articles', { articles: articles });
     }
 }
