@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const logger = require('winston');
 const Articles = require('../controllers/articlesCtrl');
-const Config = require('../controllers/confgiCtrl');
+const Config = require('../controllers/configCtrl');
 
 module.exports = () => {
     router.get('/', (req, res) => {

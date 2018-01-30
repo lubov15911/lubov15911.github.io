@@ -21,4 +21,19 @@ app.use(bodyParser.urlencoded({ extended: false }));
 let routes = require('./routes')();
 app.use('/', routes);
 
+// catch 404 and forward to error handler
+app.use((req, res, next) => {
+    let err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('notFound', {
+        message: err.stack,
+        error: {}
+    });
+});
+
 module.exports = app;
