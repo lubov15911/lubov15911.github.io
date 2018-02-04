@@ -1,0 +1,10 @@
+section
+  form#creation-form(action='/article' method='post')
+    input(type='text' name='id' placeholder='Enter ID' required autofocus)
+    input(type='text' name='title' placeholder='title' required)
+    textarea(name='body' placeholder='body' required)
+    input(type='text' name='author' placeholder='author' required)
+    input(type='email' name='email' placeholder='email' required)
+    button(type='submit') Create
+  if status
+    p Status: #{status}

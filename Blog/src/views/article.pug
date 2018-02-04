@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  if article
+    div
+      h2 "#{article.title}"
+      p #{article.body}
+      p Published at #{article.publishedAt}
+      a(href='/article/edit/' + article._id) Edit
+
+      button(data-id=article._id onclick='deleteArticle(this)') Delete
+  else
+    h2 We are sorry, but we can not find the article
+  script(src='../js/handlers/articleEdit.js')

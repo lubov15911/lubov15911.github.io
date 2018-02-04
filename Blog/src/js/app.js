@@ -7,6 +7,9 @@ const logger = require('winston');
 logger.add(logger.transports.File, { filename: 'winston.log', formatter: require('./configs/fileFormatter'), json: false });
 logger.remove(logger.transports.Console);
 
+const mongoose = require('mongoose');
+mongoose.connect(require('./db/config').url);
+
 const app = express();
 
 logger.info('[App]: Initialization');
@@ -18,7 +21,7 @@ app.use(express.static(path.join(__dirname, '../')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-let routes = require('./routes')();
+let routes = require('./routes/routes')();
 app.use('/', routes);
 
 // catch 404 and forward to error handler
@@ -28,7 +31,7 @@ app.use((req, res, next) => {
     next(err);
 });
 
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
     res.status(err.status || 500);
     res.render('notFound', {
         message: err.stack,

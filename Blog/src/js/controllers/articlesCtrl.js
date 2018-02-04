@@ -1,71 +1,109 @@
-let articles = require('../../content/allArticles');
-const fs = require('fs');
-const path = require('path');
 const logger = require('winston');
-const FILE_PATH = path.join(__dirname, '../../content/allArticles');
+const Article = require('../db/models/article');
 
 function getAll(req, res, next) {
     logger.debug('[ArticlesCtrl]: Received getAll articles request');
-    res.render('articles', { articles: articles });
+
+    Article.find((error, articles) => {
+        if (!error) {
+            res.statusCode = 200;
+            res.statusMessage = 'All articles successfully loaded'; // todo: constants with statusMessages
+            logger.info('[ArticleCtrl]: All articles successfully loaded');
+        } else {
+            res.statusCode = 500;
+            res.statusMessage = 'Unable to load articles';
+            logger.error('[ArticleCtrl]: Unable to load the articles');
+        }
+        res.render('articleList', { articles: articles });
+    });
 }
 
 function getArticle(req, res, next) {
     logger.debug('[ArticlesCtrl]: Received getArticle request. Article id:', req.params.id);
-    let article = articles.find((item) => item._id === req.params.id);
-    let articlesFound = article ? [article] : null;
+    let render = 'article' + (req.url.split('/').find(item => item === 'edit') ? 'Edit' : '');
 
-    res.render('articles', { articles: articlesFound });
+    Article.findOne({ _id: req.params.id }, (error, article) => {
+        if (!error) {
+            res.statusCode = 200;
+            res.statusMessage = 'Article successfully found';
+            logger.info('[ArticleCtrl]: Article successfully found');
+        } else {
+            res.statusCode = 500;
+            res.statusMessage = 'Unable to find the article';
+            logger.error('[ArticleCtrl]: Unable to find the article');
+        }
+        res.render(render, { article: article });
+    });
 }
 
 function removeArticle(req, res, next) {
     logger.debug('[ArticlesCtrl]: Received removeArticle request. Article id:', req.params.id);
-    let articleIndex = articles.findIndex((item) => item._id === req.params.id);
-    if (articleIndex !== -1) {
-        articles.splice(articleIndex, 1);
 
-        fs.writeFile(FILE_PATH + '.json', JSON.stringify(articles), 'utf8', (error) => {
-            if (!error) {
-                res.statusCode = 200;
-                res.statusMessage = 'Article successfully removed';
-                logger.info('[ArticleCtrl: Article successfully removed');
-            } else {
-                res.statusCode = 500;
-                res.statusMessage = 'Unable to delete the article';
-                logger.error('[ArticleCtrl: Unable to delete the article');
-            }
-            res.render('articles', { articles: articles });
-        });
-    } else {
-        res.statusCode = 404;
-        res.statusMessage = 'Article is not found';
-        logger.error('[ArticleCtrl: Article is not found');
-        res.render('articles', { articles: articles });
-    }
+    Article.remove({ _id: req.params.id }, error => {
+        if (!error) {
+            res.statusCode = 200;
+            res.statusMessage = 'Article successfully removed';
+            logger.info('[ArticleCtrl]: Article successfully removed');
+        } else {
+            res.statusCode = 500;
+            res.statusMessage = 'Unable to delete the article';
+            logger.error('[ArticleCtrl]: Unable to delete the article');
+        }
+        res.redirect('/articles');
+    });
 }
 
 function createArticle(req, res, next) {
-    logger.debug('[ArticlesCtrl]: Received createArticle request. Article id:', req.params.id);
+    logger.debug('[ArticlesCtrl]: Received createArticle request');
 
-    if (!req.body._id) {
+    if (!req.body) {
         res.statusCode = 400; // Check an appropriate error code
         res.statusMessage = 'Body is incorrect';
-        logger.error('[ArticleCtrl: Body is incorrect');
-        res.render('articles', { articles: articles });
+        logger.error('[ArticleCtrl]: Body is incorrect');
+        res.render('index', { status: res.statusMessage });
         return;
     }
-    articles.push(req.body);
 
-    fs.writeFile(FILE_PATH + '.json', JSON.stringify(articles), 'utf8', (error) => {
+    // todo: remove ID input from view and Add ID generation somewhere here (before creation db data)
+
+    let article = new Article({
+        _id: req.body.id,
+        title: req.body.title,
+        body: req.body.body,
+        author: req.body.author,
+        publishedAt: (new Date()).toLocaleString(),
+        email: req.body.email
+    });
+
+    article.save(error => {
         if (!error) {
             res.statusCode = 200;
             res.statusMessage = 'Article successfully added';
-            logger.info('[ArticleCtrl: Article successfully added');
+            logger.info('[ArticleCtrl]: Article successfully added');
         } else {
             res.statusCode = 500;
             res.statusMessage = 'Unable to add the article';
-            logger.error('[ArticleCtrl: Unable to add the article');
+            logger.error('[ArticleCtrl]: Unable to add the article');
         }
-        res.render('articles', { articles: articles });
+        res.render('index', { status: res.statusMessage });
+    });
+}
+
+function updateArticle(req, res, next) {
+    logger.debug('[ArticlesCtrl]: Received updateArticle request. Article id:', req.params.id);
+    let data = req.body;
+
+    Article.findByIdAndUpdate(req.params.id, { $set: { title: data.title, body: data.body }}, { new: false }, (error, article) => {
+        if (!error) {
+            res.statusCode = 200;
+            res.statusMessage = 'Article successfully updated';
+            logger.info('[ArticleCtrl]: Article successfully updated');
+        } else {
+            res.statusCode = 500;
+            res.statusMessage = 'Unable to update the article';
+            logger.error('[ArticleCtrl]: Unable to update the article');
+        }
+        res.redirect('/articles');
     });
 }
 
@@ -73,5 +111,6 @@ module.exports = {
     getAll: getAll,
     getArticle: getArticle,
     removeArticle: removeArticle,
-    createArticle: createArticle
+    createArticle: createArticle,
+    updateArticle: updateArticle
 };

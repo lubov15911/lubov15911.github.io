@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const logger = require('winston');
 const Articles = require('../controllers/articlesCtrl');
-const Config = require('../controllers/configCtrl');
 
 module.exports = () => {
     router.get('/', (req, res) => {
@@ -12,12 +11,19 @@ module.exports = () => {
 
     router.get('/articles', Articles.getAll);
     router.get('/article/:id', Articles.getArticle);
+    router.get('/article/edit/:id', Articles.getArticle);
 
     router.delete('/article/:id', Articles.removeArticle);
 
-    router.put('/article/:id', Articles.createArticle);
+    // Unwrapper for PUT request, because
+    // Forms support only GET and POST methods
+    router.post('/article', (req, res, next) => {
+        req.method = 'PUT';
+        next();
+    });
+    router.put('/article', Articles.createArticle);
 
-    router.post('/config', Config.saveConfig);
+    router.post('/article/:id', Articles.updateArticle);
 
     return router;
 };
