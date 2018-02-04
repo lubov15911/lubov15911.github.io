@@ -5,4 +5,5 @@ block content
     br
     a(href='articles') Load articles
     br
-    include creationForm
+    if user
+      include creationForm

@@ -4,6 +4,13 @@ const logger = require('winston');
 const Articles = require('../controllers/articlesCtrl');
 const Accounts = require('../controllers/accountsCtrl');
 
+function isAuthenticated(req, res, next) {
+    if (req.isAuthenticated())
+        return next();
+    // if the user is not authenticated then redirect him to the login page
+    res.redirect('/login');
+}
+
 module.exports = () => {
     router.get('/', (req, res) => {
         logger.debug('[Routes]: Received general request');
@@ -30,9 +37,9 @@ module.exports = () => {
 
     router.get('/articles', Articles.getAll);
     router.get('/article/:id', Articles.getArticle);
-    router.get('/article/edit/:id', Articles.getArticle);
+    router.get('/article/edit/:id', isAuthenticated, Articles.getArticle);
 
-    router.delete('/article/:id', Articles.removeArticle);
+    router.delete('/article/:id', isAuthenticated, Articles.removeArticle);
 
     // Unwrapper for PUT request, because
     // Forms support only GET and POST methods
@@ -40,9 +47,9 @@ module.exports = () => {
         req.method = 'PUT';
         next();
     });
-    router.put('/article', Articles.createArticle);
+    router.put('/article', isAuthenticated, Articles.createArticle);
 
-    router.post('/article/:id', Articles.updateArticle);
+    router.post('/article/:id', isAuthenticated, Articles.updateArticle);
 
     return router;
 };

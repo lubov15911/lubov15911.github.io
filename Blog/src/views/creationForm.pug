@@ -1,10 +1,15 @@
 section
-  form#creation-form(action='/article' method='post')
-    input(type='text' name='id' placeholder='Enter ID' required autofocus)
-    input(type='text' name='title' placeholder='title' required)
-    textarea(name='body' placeholder='body' required)
-    input(type='text' name='author' placeholder='author' required)
-    input(type='email' name='email' placeholder='email' required)
+  h3 Create an article:
+  form(action='/article' method='post')
+    fieldset
+      input(type='text' name='id' placeholder='Enter ID' required autofocus)
+      input(type='text' name='title' placeholder='Enter title of article' required)
+      input(type='text' name='author' placeholder='Type your name' required)
+      input(type='email' name='email' placeholder='Your email (optional)')
+    fieldset
+      legend Body of article
+      textarea(name='body' placeholder='body' required)
+    br
     button(type='submit') Create
   if status
     p Status: #{status}
