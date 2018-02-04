@@ -3,7 +3,10 @@ header
     h1
       a(href='/') Blog
   div
-    // todo
-    //form(action='/authorization' method='POST')
-      button Sign up
-      button Log in
+    if user
+      p You are currently logged in as #{user.username}
+      a(href='/logout') Log out
+    else
+      a(href='/login') Log in
+      br
+      a(href='/register') Register

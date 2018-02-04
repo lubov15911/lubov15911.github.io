@@ -14,7 +14,7 @@ function getAll(req, res, next) {
             res.statusMessage = 'Unable to load articles';
             logger.error('[ArticleCtrl]: Unable to load the articles');
         }
-        res.render('articleList', { articles: articles });
+        res.render('articleList', { user: req.user, articles: articles });
     });
 }
 
@@ -32,7 +32,7 @@ function getArticle(req, res, next) {
             res.statusMessage = 'Unable to find the article';
             logger.error('[ArticleCtrl]: Unable to find the article');
         }
-        res.render(render, { article: article });
+        res.render(render, { user: req.user, article: article });
     });
 }
 
@@ -60,7 +60,7 @@ function createArticle(req, res, next) {
         res.statusCode = 400; // Check an appropriate error code
         res.statusMessage = 'Body is incorrect';
         logger.error('[ArticleCtrl]: Body is incorrect');
-        res.render('index', { status: res.statusMessage });
+        res.render('index', { user: req.user, status: res.statusMessage });
         return;
     }
 
@@ -85,7 +85,7 @@ function createArticle(req, res, next) {
             res.statusMessage = 'Unable to add the article';
             logger.error('[ArticleCtrl]: Unable to add the article');
         }
-        res.render('index', { status: res.statusMessage });
+        res.render('index', { user: req.user, status: res.statusMessage });
     });
 }
 

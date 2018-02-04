@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  form(action='/login' method='post')
+    input(type='text' name='username' placeholder='enter username' autofocus)
+    input(type='password' name='password' placeholder='enter password')
+    button(type='submit') Log in
+  a(href='/') Cancel
