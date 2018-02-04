@@ -2,3 +2,5 @@ extends layout
 
 block content
   h1 We are sorry, but we can not find page
+  if error
+    p Possible reason: #{error}

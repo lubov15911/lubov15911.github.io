@@ -6,6 +6,6 @@ block content
       form(action='/article/' + article._id, method='post')
         input(type='text' name='title' value=article.title autofocus)
         textarea(name='body') #{article.body}
-        button(data-type='save' data-id=article._id) Save
+        button(type='submit') Save
   else
     h2 We are sorry, but we can not find the article
