@@ -4,7 +4,8 @@
   "description": "Blog System",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon bin/www.js"
+    "start": "nodemon bin/www.js",
+    "database": "node ./src/js/db/createDB.js"
   },
   "author": "Lubov",
   "license": "ISC",
