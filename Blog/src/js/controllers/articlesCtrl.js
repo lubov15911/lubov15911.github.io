@@ -64,10 +64,8 @@ function createArticle(req, res, next) {
         return;
     }
 
-    // todo: remove ID input from view and Add ID generation somewhere here (before creation db data)
-
     let article = new Article({
-        _id: req.body.id,
+        _id: (Date.now().toString(36) + Math.random().toString(36).substr(2, 9)),
         title: req.body.title,
         body: req.body.body,
         author: req.body.author,
