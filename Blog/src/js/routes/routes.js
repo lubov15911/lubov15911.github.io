@@ -5,8 +5,9 @@ const Articles = require('../controllers/articlesCtrl');
 const Accounts = require('../controllers/accountsCtrl');
 
 function isAuthenticated(req, res, next) {
-    if (req.isAuthenticated())
+    if (req.isAuthenticated()) {
         return next();
+    }
     // if the user is not authenticated then redirect him to the login page
     res.redirect('/login');
 }
