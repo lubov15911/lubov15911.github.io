@@ -1,4 +1,9 @@
 extends layout
 
 block content
-  h1 Welcome to hell :)
+  div
+    br
+    a(href='articles') Load articles
+    br
+    if user
+      include creationForm

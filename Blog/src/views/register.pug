@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  form(action='/register' method='post')
+    input(type='text' name='username' placeholder='enter username' required autofocus)
+    input(type='password' name='password' placeholder='enter password' required)
+    button(type='submit') Register
+  br
+  a(href='/')
+    button(type='button') Cancel

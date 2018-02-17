@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  if article
+    section
+      form(action='/article/' + article._id, method='post')
+        input(type='text' name='title' value=article.title autofocus)
+        textarea(name='body') #{article.body}
+        button(type='submit') Save
+  else
+    h2 We are sorry, but we can not find the article

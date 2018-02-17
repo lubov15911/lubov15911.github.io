@@ -1,11 +1,17 @@
 const express = require('express');
 const path = require('path');
 const bodyParser  = require('body-parser');
+const cookieParser = require('cookie-parser');
+const passport = require('passport');
 
 // Initialize logger
 const logger = require('winston');
 logger.add(logger.transports.File, { filename: 'winston.log', formatter: require('./configs/fileFormatter'), json: false });
 logger.remove(logger.transports.Console);
+
+// Initialize database
+const mongoose = require('mongoose');
+mongoose.connect(require('./db/config').url);
 
 const app = express();
 
@@ -17,8 +23,19 @@ app.use(express.static(path.join(__dirname, '../')));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(require('express-session')({
+    secret: 'blog system',
+    resave: false,
+    saveUninitialized: false
+}));
 
-let routes = require('./routes')();
+//Initialize passport
+app.use(passport.initialize());
+app.use(passport.session());
+require('./passport/config')(passport);
+
+let routes = require('./routes/routes')();
 app.use('/', routes);
 
 // catch 404 and forward to error handler
@@ -28,12 +45,9 @@ app.use((req, res, next) => {
     next(err);
 });
 
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
     res.status(err.status || 500);
-    res.render('notFound', {
-        message: err.stack,
-        error: {}
-    });
+    res.render('notFound', { error: err.statusMessage });
 });
 
 module.exports = app;
