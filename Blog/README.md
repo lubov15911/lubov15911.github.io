@@ -13,9 +13,13 @@
 
 You should see 7 lines about article successful adding in a console.
 
+:exclamation: In order to run React Application you should firstly build the one:
+    
+    `npm run build`
+
 :exclamation: The next step is to start a server executing the following command:
     
-    `npm start`
+    `npm run server`
 
 :exclamation: Now you can go to a browser and open 'http://localhost:3000' or click [here:)][1]
 

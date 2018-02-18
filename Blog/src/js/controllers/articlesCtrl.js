@@ -32,10 +32,11 @@ function getAll(req, res) {
             res.statusMessage = STATUS_MESSAGE.ERROR.ArticlesLoaded;
             logger.error('[ArticleCtrl]: Unable to load the articles');
         }
-        res.render('articleList', { user: req.user, articles: articles });
+        res.send({ /*user: req.user, */articles: articles });
     });
 }
 
+// todo: change for React App
 function getArticle(req, res) {
     logger.debug('[ArticlesCtrl]: Received getArticle request. Article id:', req.params.id);
     // render is a page which will be shown: article or articleEdit
@@ -68,7 +69,7 @@ function removeArticle(req, res) {
             res.statusMessage = STATUS_MESSAGE.ERROR.ArticleRemoved;
             logger.error('[ArticleCtrl]: Unable to delete the article');
         }
-        res.redirect('/articles');
+        res.send();
     });
 }
 
@@ -79,7 +80,7 @@ function createArticle(req, res) {
         res.statusCode = 400; // todo: Check an appropriate error code
         res.statusMessage = STATUS_MESSAGE.ERROR.IncorrectBody;
         logger.error('[ArticleCtrl]: Body is incorrect');
-        res.render('index', { user: req.user, status: res.statusMessage });
+        res.send(/*{ user: req.user }*/);
         return;
     }
 
@@ -102,10 +103,11 @@ function createArticle(req, res) {
             res.statusMessage = STATUS_MESSAGE.ERROR.ArticleAdded;
             logger.error('[ArticleCtrl]: Unable to add the article');
         }
-        res.render('index', { user: req.user, status: res.statusMessage });
+        res.send(/*{ user: req.user }*/);
     });
 }
 
+// todo: change for React App
 function updateArticle(req, res) {
     logger.debug('[ArticlesCtrl]: Received updateArticle request. Article id:', req.params.id);
     let data = req.body;
