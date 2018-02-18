@@ -15,9 +15,14 @@ function isAuthenticated(req, res, next) {
 module.exports = () => {
     router.get('/', (req, res) => {
         logger.debug('[Routes]: Received general request');
-        res.render('index', { user: req.user });
+        res.sendFile('/index.html');
+        // res.render('index', { user: req.user });
     });
+    router.get('/articles', Articles.getAll);
+    router.delete('/article/:id', /*isAuthenticated, */Articles.removeArticle);
+    router.put('/article', /*isAuthenticated, */Articles.createArticle);
 
+    // todo: implement the following routers in the React App
     router.get('/login', (req, res) => {
         logger.debug('[Routes]: Go to login form');
         res.render('login');
@@ -36,21 +41,10 @@ module.exports = () => {
         res.redirect('/');
     });
 
-    router.get('/articles', Articles.getAll);
     router.get('/article/:id', Articles.getArticle);
-    router.get('/article/edit/:id', isAuthenticated, Articles.getArticle);
+    router.get('/article/edit/:id', /*isAuthenticated, */Articles.getArticle);
 
-    router.delete('/article/:id', isAuthenticated, Articles.removeArticle);
-
-    // Unwrapper for PUT request, because
-    // Forms support only GET and POST methods
-    router.post('/article', (req, res, next) => {
-        req.method = 'PUT';
-        next();
-    });
-    router.put('/article', isAuthenticated, Articles.createArticle);
-
-    router.post('/article/:id', isAuthenticated, Articles.updateArticle);
+    router.post('/article/:id', /*isAuthenticated, */Articles.updateArticle);
 
     return router;
 };

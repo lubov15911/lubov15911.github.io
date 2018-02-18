@@ -4,7 +4,8 @@
   "description": "Blog System",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon bin/www.js",
+    "build": "node_modules/.bin/webpack",
+    "server": "nodemon bin/www.js",
     "database": "node ./src/js/db/createDB.js"
   },
   "author": "Lubov",
@@ -18,10 +19,17 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^4.4.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "webpack": "^3.11.0",
     "winston": "^2.4.0"
   },
   "devDependencies": {
-    "nodemon": "^1.14.11",
-    "pug": "^2.0.0-rc.4"
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "nodemon": "^1.14.11"
   }
 }
