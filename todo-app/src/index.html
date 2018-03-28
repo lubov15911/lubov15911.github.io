@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="TodoApp">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    .error {
+      color: red;
+    }
+    .lists {
+      display: flex;
+    }
+    .lists > div {
+      border: black 1px solid;
+    }
+    .hidden-edit-field {
+      border: none;
+    }
+  </style>
+</head>
+<body>
+<main ng-controller="TodosCtrl">
+  <div>
+    <input type="text"
+           ng-model="form.text"
+           autofocus />
+    <button ng-click="createNewTodo(form.text)">Create</button>
+    <button ng-click="resetForm()">Clear</button>
+    <p class="error" ng-if="form.error">{{form.error}}</p>
+  </div>
+  <div ng-if="todosList.length">
+    <div class="lists">
+      <div>
+        <h4>Not Completed Todos:</h4>
+        <ul>
+          <!--todo: use directive for todo items-->
+          <li ng-repeat="todo in todosList | filter:{ doneState: false, hidden: false } | orderBy:'text'">
+            <!--<input class="hidden-edit-field ng-model="todo.text" />-->
+            <p ng-click="edit(todo)">{{todo.text}}</p>
+            <button ng-click="todo.complete()">Done</button>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h4>Completed Todos:</h4>
+        <ul>
+          <li ng-repeat="todo in todosList | filter:{ doneState: true, hidden: false }">
+            <p>{{todo.text}}</p>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <input type="date" ng-model="filter">
+      </div>
+    </div>
+  </div>
+</main>
+<script src="bundle.js"></script>
+</body>
+</html>

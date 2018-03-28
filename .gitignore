@@ -1,3 +1,4 @@
 node_modules
 NewsPortal/public
 Blog/winston.log
+todo-app/src/bundle.js
